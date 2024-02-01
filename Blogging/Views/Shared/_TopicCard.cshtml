@@ -1,7 +1,9 @@
-﻿<div class="card mb-3" style="max-width:540px">
-    <div class="row no-gutters">
-        <div class="col-md-4">
-            <img src
-        </div>
+﻿@model Topic
+
+<div class="card bg-dark text-white">
+    <img src="@Model.ThumbnailUrl" class="card-img" alt="TopicImage">
+    <div class="card-img-overlay">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">@Model.Description</p>
     </div>
 </div>
