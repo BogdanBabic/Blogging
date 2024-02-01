@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 namespace Blogging.Models
 {
     public class PostRepository : IPostRepository
@@ -11,7 +11,15 @@ namespace Blogging.Models
 
         public Post GetPostById(int id)
         {
-            return _context.Posts.Include(p => p.)
+            return _context.Posts.Include(p => p.TopicId).FirstOrDefault(p => p.Id == id);
+        }
+
+        public IEnumerable<Post> Posts
+        {
+            get
+            {
+                return _context.Posts.Include(p => p.TopicId);
+            }
         }
     }
 }

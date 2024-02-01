@@ -7,8 +7,8 @@
 </h1>
 
 <div class="col-md-3">
-    @foreach (var topic in Model.SelectedTopic)
+    @foreach (var post in Model.SelectedTopic)
     {
-        <partial name="_PostCard" model="topic"/>
+        <partial name="_PostCard" model="post"/>
     }
 </div>

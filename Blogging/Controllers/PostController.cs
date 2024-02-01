@@ -6,12 +6,25 @@ namespace Blogging.Controllers
     public class PostController : Controller
     {
         private readonly ITopicRepository _topicRepository;
-        public PostController()
+        private readonly IPostRepository _postRepository;
+        public PostController(ITopicRepository topicRepository, IPostRepository postRepository)
         {
-            
+            _topicRepository = topicRepository;
+            _postRepository = postRepository;
+
         }
-        public IActionResult PostList()
+        public ViewResult PostList(int? topicId)
         {
+            IEnumerable<Post> posts;
+            string? topic = "";
+
+            var topicObj = _topicRepository.GetTopicById(topicId);
+
+            if (topicObj != null)
+            {
+                topic = topicObj.Name;
+            }
+
             return View();
         }
     }

@@ -8,7 +8,7 @@
         public string Thumbnail { get; set; }
         public DateTime TimeCreated { get; set; }
         public DateTime TimeUpdated { get; set; } = DateTime.Now;
-        public Topic Topic { get; set; }
+        public Topic TopicId { get; set; }
         public int? UserId { get; set; }
     }
 }

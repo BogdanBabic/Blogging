@@ -16,7 +16,7 @@
 
         public Topic GetTopicById(int? id)
         {
-            return _context.Topics.FirstOrDefault(t => t.ID == id)!;
+            return _context.Topics.FirstOrDefault(t => t.TopicId == id)!;
         }
     }
 }
