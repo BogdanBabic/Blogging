@@ -1,9 +1,12 @@
 ﻿@model Topic
 
-<div class="card bg-dark text-white">
-    <img src="@Model.ThumbnailUrl" class="card-img" alt="TopicImage">
-    <div class="card-img-overlay">
-        <h5 class="card-title">@Model.Name</h5>
-        <p class="card-text">@Model.Description</p>
+
+<div class="col">
+    <div class="card position-relative" style="width: 18rem;">
+        <img src="@Model.ThumbnailUrl" class="card-img-top" alt="TopicImage">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+            <p class="card-text">@Model.Description</p>
+        </div>
     </div>
 </div>
