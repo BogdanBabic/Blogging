@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json.Serialization;
+﻿using Blogging.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Blogging.Models
+namespace Blogging.ViewModels
 {
-    public class User
+    public class RegisterViewModel
     {
         public int UserId { get; set; }
 
@@ -39,5 +39,7 @@ namespace Blogging.Models
         [Display(Name = "Prezime")]
         [StringLength(30, ErrorMessage = "Prezime može da sadrži maksimum 15 karaktera")]
         public string LastName { get; set; }
+        
+        public List<Post> Posts { get; set; }
     }
 }

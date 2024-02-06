@@ -11,14 +11,14 @@ namespace Blogging.Models
 
         public Post GetPostById(int id)
         {
-            return _context.Posts.Include(p => p.TopicId).FirstOrDefault(p => p.Id == id);
+            return _context.Posts.Include(p => p.Topic).FirstOrDefault(p => p.ID == id)!;
         }
 
         public IEnumerable<Post> Posts
         {
             get
             {
-                return _context.Posts.Include(p => p.TopicId);
+                return _context.Posts.Include(p => p.Topic);
             }
         }
     }

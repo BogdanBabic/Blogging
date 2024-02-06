@@ -4,9 +4,11 @@
     Pogledajte neke od aktuelnih tema!
 </h2>
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    @foreach (var topic in Model)
-    {
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var topic in Model)
+        {
             <partial name="_TopicCard" model="topic" />
-    }
+        }
+    </div>
 </div>
