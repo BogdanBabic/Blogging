@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Http;
 @using Newtonsoft.Json;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +16,6 @@
     <script src="~/lib/jquery/jquery.js"></script>
     <script src="~/lib/jquery-validate/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
     <link rel="stylesheet" href="~/css/custom.css">
 </head>
 <body>
@@ -42,6 +42,20 @@
                             <a class="nav-link text-light" asp-controller="Home" asp-action="Privacy">Politika Privatnosti</a>
                         </li>
                     </ul>
+                    <ul class="nav navbar-nav ms-auto">
+                        <li class="nav-item d-flex flex-column flex-md-row">
+                            @if (isLoggedIn)
+                            {
+                                <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="Profile">@username</a>
+                                <a class="btn btn-outline-light mt-3 mt-md-0 me-2" asp-controller="User" asp-action="Logout">Izloguj se</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="Login">Uloguj se</a>
+                                <a class="btn btn-outline-light mt-3 mt-md-0" asp-controller="User" asp-action="Index">Registruj se</a>
+                            }
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -58,5 +72,7 @@
             &copy; 2024 - Blogging - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await Component.InvokeAsync("Notyf")
 </body>
 </html>
