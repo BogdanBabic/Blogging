@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Blogging.Models
 {
@@ -20,6 +21,7 @@ namespace Blogging.Models
         [StringLength(20, ErrorMessage = "Šifra može da sadrži maksimum 30 karaktera")]
         public string Password { get; set; }
 
+        [NotMapped]
         [Display(Name = "Confirm password")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Šifre se ne poklapaju")]

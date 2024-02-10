@@ -39,7 +39,7 @@ namespace Blogging.ViewModels
         [Display(Name = "Prezime")]
         [StringLength(30, ErrorMessage = "Prezime može da sadrži maksimum 15 karaktera")]
         public string LastName { get; set; }
-        
+
         public List<Post> Posts { get; set; }
     }
 }

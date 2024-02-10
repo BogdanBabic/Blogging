@@ -21,5 +21,11 @@ namespace Blogging.Models
                 return _context.Posts.Include(p => p.Topic);
             }
         }
+
+        public void CreatePost(Post post)
+        {
+            _context.Posts.Add(post);
+            _context.SaveChanges();
+        }
     }
 }

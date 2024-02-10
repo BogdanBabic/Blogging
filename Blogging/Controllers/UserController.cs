@@ -2,7 +2,6 @@
 using Blogging.Models;
 using Blogging.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Blogging.ViewModels;
 using Blogging.Helpers;
 using Newtonsoft.Json;
 
@@ -27,7 +26,7 @@ namespace Blogging.Controllers
         {
             var user = _userRepository.GetUserByUsername(registerViewModel.Username);
 
-            User userVM = new User()
+            User userVM = new User
             {
                 UserId = registerViewModel.UserId,
                 Username = registerViewModel.Username,
@@ -37,8 +36,9 @@ namespace Blogging.Controllers
                 Email = registerViewModel.Email
             };
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+
                 if (user == null)
                 {
                     _userRepository.CreateUser(userVM);
@@ -51,6 +51,7 @@ namespace Blogging.Controllers
                     _notyf.Error("Korisničko ime već postoji");
                     return View("Registration", userVM);
                 }
+
             }
 
             else
@@ -76,7 +77,7 @@ namespace Blogging.Controllers
             if (user != null)
             {
                 var isPasswordOk = EncryptionHelper.Encrypt(loginViewModel.Password) == user.Password ? true : false;
-            
+
                 if (isPasswordOk)
                 {
                     user.Password = "";
@@ -88,10 +89,22 @@ namespace Blogging.Controllers
                     _notyf.Success("Uspešno ste se ulogovali!");
 
                     return RedirectToAction("Index", "Home");
-                }            
+                }
             }
 
             _notyf.Error("Uneli ste neispravne podatke");
+
+            return View("Login");
+        }
+
+        public IActionResult Logout()
+        {
+            if (HttpContext!.User!.Identity!.IsAuthenticated)
+            {
+                Response.Cookies.Delete("User");
+            }
+
+            _notyf.Success("Uspešno ste se odjavili");
 
             return RedirectToAction("Index", "Home");
         }

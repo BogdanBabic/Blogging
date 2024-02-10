@@ -18,6 +18,12 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <link rel="stylesheet" href="~/css/custom.css">
 </head>
+
+@{
+    var isUserLoggedIn = HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
+    var username = HttpContextAccessor.HttpContext.User.Identity.Name;
+}
+
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
@@ -44,15 +50,26 @@
                     </ul>
                     <ul class="nav navbar-nav ms-auto">
                         <li class="nav-item d-flex flex-column flex-md-row">
-                            @if (isLoggedIn)
+                            @if (isUserLoggedIn)
                             {
                                 <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="Profile">@username</a>
                                 <a class="btn btn-outline-light mt-3 mt-md-0 me-2" asp-controller="User" asp-action="Logout">Izloguj se</a>
                             }
                             else
                             {
-                                <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="Login">Uloguj se</a>
-                                <a class="btn btn-outline-light mt-3 mt-md-0" asp-controller="User" asp-action="Index">Registruj se</a>
+                                <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="Login">
+                                    Uloguj se
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-trash" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.29 10.71l-4.79 4.79-1.42-1.42 3.79-3.79-3.79-3.79 1.42-1.42 4.79 4.79zM12 4c4.42 0 8 3.58 8 8s-3.58 8-8 8-8-3.58-8-8 3.58-8 8-8z" />
+                                    </svg>
+                                </a>
+                                <a class="btn btn-outline-light mt-3 mt-md-0" asp-controller="User" asp-action="Registration">
+                                    Registruj se
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-trash" viewBox="0 0 24 24">
+                                        <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm4 11h-3v3h-2v-3h-3v-2h3v-3h2v3h3v2z" />
+                                    </svg>
+                                </a>
+                                
                             }
                         </li>
                     </ul>
@@ -67,7 +84,6 @@
     </div>
 
     <footer class="border-top footer">
-        @* Ovde dole lupi exception *@
         <div class="container">
             &copy; 2024 - Blogging - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
