@@ -1,0 +1,54 @@
+﻿@model Post
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h2>@Model.Head</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="@Model.Thumbnail" class="img-fluid" alt="Thumbnail">
+                </div>
+                <div class="col-md-8">
+                    <p>@Model.Body</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <p class="text-muted">Objavljeno: @Model.TimeCreated.ToString("dd/MM/yyyy")</p>
+            <p class="text-muted">Izmenjeno: @Model.TimeUpdated.ToString("dd/MM/yyyy")</p>
+            <h3>Comments</h3>
+            <ul>
+                @if (Model.Comments != null)
+                {
+                    @foreach (var comment in Model.Comments)
+                    {
+                        <partial name="_Comment" model="comment" />
+                    }
+                }
+                else
+                {
+                    <li class="text-italic">Ostavite prvi komentar</li>
+                }
+            </ul>
+            <div class="card-footer">
+                <div class="row g-2">
+                    <h4>
+                        Dodajte vaš komentar
+                    </h4>
+                    <form asp-controller="Comment" asp-action="CreateComment" method="post" role="form">
+                        <input type="hidden" name="PostId" value="@Model.ID" />
+                        <div class="col-12">
+                            <input asp-for="Body" class="form-control" style="font-style: italic" placeholder="Šta misliš o ovome?" value="" />
+                            <span asp-validation-for="Body" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <input type="submit" class="btn btn-warning mt-3" value="Komentariši" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

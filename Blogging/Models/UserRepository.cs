@@ -9,7 +9,7 @@ namespace Blogging.Models
         {
             _context = context;
         }
-        
+
         public void CreateUser(User user)
         {
             user.Password = EncryptionHelper.Encrypt(user.Password);
@@ -26,6 +26,12 @@ namespace Blogging.Models
         public User GetUserById(int id)
         {
             return _context.Users.FirstOrDefault(u => u.UserId == id);
+        }
+
+        public string GetUsernameByUserId(int userId)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+            return user != null ? user.Username : null;
         }
     }
 }

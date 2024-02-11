@@ -2,6 +2,7 @@
 using Blogging.Models;
 using Blogging.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
 namespace Blogging.Controllers
@@ -10,11 +11,15 @@ namespace Blogging.Controllers
     {
         private readonly ITopicRepository _topicRepository;
         private readonly IPostRepository _postRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly ICommentRepository _commentRepository;
         private readonly INotyfService _notyf;
-        public PostController(ITopicRepository topicRepository, IPostRepository postRepository, INotyfService notyf)
+        public PostController(ITopicRepository topicRepository, IPostRepository postRepository, ICommentRepository commentRepository, INotyfService notyf, IUserRepository userRepository)
         {
             _topicRepository = topicRepository;
             _postRepository = postRepository;
+            _commentRepository = commentRepository;
+            _userRepository = userRepository;
             _notyf = notyf;
         }
         public ViewResult PostList(int topicId)
@@ -43,12 +48,30 @@ namespace Blogging.Controllers
             return View(new PostListViewModel(posts, topic));
         }
 
-        public IActionResult ViewPost(int id)
+        public IActionResult ViewPost(int postId)
         {
-            Post p = _postRepository.GetPostById(id);
+            Post p = _postRepository.GetPostById(postId);
+
+            if (p == null)
+            {
+                return NotFound();
+            }
+
+            var comments = _commentRepository.GetCommentsByPostId(postId);
+
+            foreach (var comment in comments)
+            {
+                if (comment.UserId != null)
+                {
+                    comment.User = _userRepository.GetUserById(comment.UserId.Value);
+                }
+            }
+
+            p.Comments = comments;
 
             return View(p);
         }
+
 
         public IActionResult PostCreator()
         {
@@ -59,30 +82,10 @@ namespace Blogging.Controllers
 
         public IActionResult CreatePost(CreatePostViewModel model)
         {
-            if (Request.HttpContext.User.Identity.IsAuthenticated)
-            {
-                var userCookie = Request.Cookies["User"];
-                var user = JsonConvert.DeserializeObject<User>(userCookie!);
+            var userCookie = Request.Cookies["User"];
+            var user = JsonConvert.DeserializeObject<User>(userCookie!);
 
-                var post = new Post
-                {
-                    Head = model.Head,
-                    Body = model.Body,
-                    Thumbnail = model.Thumbnail,
-                    TimeCreated = DateTime.Now,
-                    TimeUpdated = DateTime.Now,
-                    Topic = model.Topic,
-                    UserId = user.UserId
-                };
-
-                _postRepository.CreatePost(post);
-
-                _notyf.Success("Objava uspešno kreirana");
-
-                return RedirectToAction("PostList", "Post");
-            }
-
-            var anonymousPost = new Post
+            var post = new Post
             {
                 Head = model.Head,
                 Body = model.Body,
@@ -92,9 +95,14 @@ namespace Blogging.Controllers
                 Topic = model.Topic
             };
 
-            _postRepository.CreatePost(anonymousPost);
+            if (user != null)
+            {
+                post.UserId = user.UserId;
+            }
 
-            _notyf.Success("Objava uspešno kreirana");
+            _postRepository.CreatePost(post);
+
+            _notyf.Success("Objava uspešno postavljena");
 
             return RedirectToAction("PostList", "Post");
         }

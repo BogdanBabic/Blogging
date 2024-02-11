@@ -6,12 +6,13 @@ namespace Blogging.Controllers
 {
     public class TopicController : Controller
     {
-        public readonly ITopicRepository _topicRepository;
-        public readonly IPostRepository _postRepository;
+        private readonly ITopicRepository _topicRepository;
+        private readonly IPostRepository _postRepository;
+
         public TopicController(ITopicRepository topicRepository, IPostRepository postRepository)
         {
             _topicRepository = topicRepository;
-            _postRepository = postRepository;
+            _postRepository = postRepository; 
         }
 
         public IActionResult TopicList()

@@ -1,4 +1,6 @@
-﻿namespace Blogging.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Blogging.Models
 {
     public class Post
     {
@@ -11,5 +13,8 @@
         public int TopicId { get; set; }
         public Topic Topic { get; set; }
         public int? UserId { get; set; }
+
+        [NotMapped]
+        public IEnumerable<Comment> Comments { get; set; }
     }
 }

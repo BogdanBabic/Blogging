@@ -2,10 +2,10 @@
 
 <div class="card mb-3" style="max-width:540px">
     <div class="row no-gutters">
-        <div class="col-md-4">
-            <img src="@Model.Thumbnail" class="card-img" alt="TopicImage" />
+        <div class="col-md-6">
+            <img src="@Model.Thumbnail" class="card-img" style=" height: 200px; width: 12rem" alt="TopicImage" />
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="card-body">
                 <h5 class="card-title">
                     @Model.Head
@@ -17,9 +17,10 @@
                 </p>
                 <p class="card-text">
                     <small class="text-muted">
-                        Posted @Model.TimeUpdated
+                        Last edited @Model.TimeUpdated
                     </small>
                 </p>
+                <a asp-controller="Post" asp-action="ViewPost" asp-route-postId="@Model.ID" class="stretched-link"></a>
             </div>
         </div>
     </div>

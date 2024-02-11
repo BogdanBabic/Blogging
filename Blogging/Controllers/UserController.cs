@@ -99,10 +99,7 @@ namespace Blogging.Controllers
 
         public IActionResult Logout()
         {
-            if (HttpContext!.User!.Identity!.IsAuthenticated)
-            {
-                Response.Cookies.Delete("User");
-            }
+            Response.Cookies.Delete("User");
 
             _notyf.Success("Uspešno ste se odjavili");
 
