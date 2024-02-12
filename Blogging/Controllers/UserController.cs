@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Blogging.Helpers;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using Blogging.TagHelpers;
 
 namespace Blogging.Controllers
 {
@@ -109,6 +110,40 @@ namespace Blogging.Controllers
 
         public IActionResult UserProfile()
         {
+            return View();
+        }
+
+        public IActionResult EditPassword(UpdateUserViewModel model)
+        {
+            var user = _userRepository.GetUserById(model.UserId);
+
+            if (model.Username != user.Username)
+            {
+                return View("UserProfile", model);
+            }
+
+            if (user.Password == EncryptionHelper.Encrypt(model.CurrentPassword))
+            {
+                _userRepository.UpdatePassword(user, model.NewPassword);
+
+                _notyf.Success("Uspešno ste promenili šifru");
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            else
+            {
+                _notyf.Error("Šifra je neispravna");
+
+                return View("UserProfile", model);
+            }
+        }
+
+        [TypeFilter(typeof(UserExceptionFilter))]
+        public IActionResult MyPosts()
+        {
+            throw new InvalidOperationException("Neka greška");
+
             return View();
         }
     }

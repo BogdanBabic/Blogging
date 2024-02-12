@@ -6,5 +6,6 @@
         User GetUserByUsername(string username);
         User GetUserById(int id);
         string GetUsernameByUserId(int userId);
+        void UpdatePassword(User user, string newPassword);
     }
 }

@@ -64,7 +64,7 @@
                         <li class="nav-item d-flex flex-column flex-md-row">
                             @if (!string.IsNullOrEmpty(user!.Username))
                             {
-                                <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="Profile">@user.Username</a>
+                                <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="UserProfile">@user.Username</a>
                                 <a class="btn btn-outline-light mt-3 mt-md-0 me-2" asp-controller="User" asp-action="Logout">Izloguj se</a>
                             }
                             else
