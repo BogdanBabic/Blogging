@@ -4,6 +4,8 @@ using Blogging.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blogging.Controllers
 {
@@ -36,8 +38,7 @@ namespace Blogging.Controllers
             {
                 PostId = postId,
                 Body = body,
-                TimeCreated = DateTime.Now,
-                TimeUpdated = DateTime.Now
+                TimeCreated = DateTime.Now
             };
 
             if (user != null)
@@ -59,6 +60,26 @@ namespace Blogging.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult RemoveComment(int commentId)
+        {
+            int userId = Convert.ToInt32(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+
+            var comment = _commentRepository.GetCommentById(commentId);
+
+            if (comment.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            _commentRepository.DeleteComment(comment);
+
+            _notyf.Success("Komentar uspešno izbrisan");
+
+
+            return RedirectToAction("ViewPost", "Post");
         }
     }
 }

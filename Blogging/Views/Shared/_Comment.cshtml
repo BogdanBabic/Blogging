@@ -17,6 +17,11 @@
         </p>
         <p>@Model.Body</p>
         <p class="text-muted">Posted on: @Model.TimeCreated.ToString("dd/MM/yyyy")</p>
-        <p class="text-muted">Last edited: @Model.TimeUpdated.ToString("dd/MM/yyyy")</p>
+        <form asp-controller="Comment" asp-action="RemoveComment" method="post">
+            <input type="hidden" name="commentId" value="@Model.ID" />
+            <button type="submit" class="btn btn-outline-danger">
+                Obriši komentar
+            </button>
+        </form>
     </div>
 </div>

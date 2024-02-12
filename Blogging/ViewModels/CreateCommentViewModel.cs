@@ -12,7 +12,6 @@ public class CreateCommentViewModel
     [StringLength(255, ErrorMessage = "Prekoračili ste limit karaktera (maksimalno 255)")]
     public string Body { get; set; }
     public DateTime TimeCreated { get; set; } = DateTime.Now;
-    public DateTime TimeUpdated { get; set; } = DateTime.Now;
     public int? UserId { get; set; }
     public int PostId { get; set; }
 }

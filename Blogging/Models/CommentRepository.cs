@@ -1,4 +1,6 @@
-﻿namespace Blogging.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Blogging.Models
 {
     public class CommentRepository : ICommentRepository
     {
@@ -24,6 +26,23 @@
         public void CreateComment(Comment comment)
         {
             _context.Comments.Add(comment);
+            _context.SaveChanges();
+        }
+
+        public Comment GetCommentById(int commentId)
+        {
+            return _context.Comments.FirstOrDefault(c => c.ID == commentId);
+        }
+
+        public void UpdateComment(Comment comment)
+        {
+            _context.Comments.Update(comment);
+            _context.SaveChanges();
+        }
+
+        public void DeleteComment(Comment comment)
+        {
+            _context.Comments.Remove(comment);
             _context.SaveChanges();
         }
     }

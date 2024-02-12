@@ -11,6 +11,5 @@ namespace Blogging.Models
         public Post Post { get; set; }
         public string Body { get; set; }
         public DateTime TimeCreated {  get; set; } = DateTime.Now;
-        public DateTime TimeUpdated { get; set; } = DateTime.Now;
     }
 }

@@ -16,5 +16,8 @@ namespace Blogging.Models
 
         [NotMapped]
         public IEnumerable<Comment> Comments { get; set; }
+
+        [NotMapped]
+        public IEnumerable<Topic> Topics { get; set; }
     }
 }

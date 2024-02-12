@@ -4,6 +4,7 @@ using Blogging.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace Blogging.Controllers
 {
@@ -76,6 +77,7 @@ namespace Blogging.Controllers
         public IActionResult PostCreator()
         {
             var vm = new CreatePostViewModel();
+            ViewBag.Topics = _topicRepository.GetAllTopics();
 
             return View(vm);
         }
@@ -92,7 +94,8 @@ namespace Blogging.Controllers
                 Thumbnail = model.Thumbnail,
                 TimeCreated = DateTime.Now,
                 TimeUpdated = DateTime.Now,
-                Topic = model.Topic
+                //Topic = model.Topic,
+                TopicId = model.TopicId
             };
 
             if (user != null)

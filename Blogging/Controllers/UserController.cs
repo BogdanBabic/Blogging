@@ -4,6 +4,7 @@ using Blogging.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Blogging.Helpers;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace Blogging.Controllers
 {
@@ -104,6 +105,11 @@ namespace Blogging.Controllers
             _notyf.Success("Uspešno ste se odjavili");
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult UserProfile()
+        {
+            return View();
         }
     }
 }
