@@ -20,13 +20,18 @@
 </head>
 
 @{
+    var isLoggedIn = HttpContextAccessor!.HttpContext!.User.Identity.IsAuthenticated;
+    var username = HttpContextAccessor.HttpContext.User.Identity.Name;
+}
+
+@* @{
     var user = new User();
     var userCookie = HttpContextAccessor.HttpContext!.Request.Cookies["User"];
     if (userCookie != null)
     {
         user = JsonConvert.DeserializeObject<User>(userCookie!);
     }
-}
+} *@
 
 <body>
     <header>
@@ -62,9 +67,10 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex flex-column flex-md-row">
-                            @if (!string.IsNullOrEmpty(user!.Username))
+
+                            @if (isLoggedIn)
                             {
-                                <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="UserProfile">@user.Username</a>
+                                <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="UserProfile">@username</a>
                                 <a class="btn btn-outline-light mt-3 mt-md-0 me-2" asp-controller="User" asp-action="Logout">Izloguj se</a>
                             }
                             else
@@ -83,6 +89,28 @@
                                 </a>
 
                             }
+
+                            @* @if (!string.IsNullOrEmpty(user!.Username))
+                            {
+                            <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="UserProfile">@user.Username</a>
+                            <a class="btn btn-outline-light mt-3 mt-md-0 me-2" asp-controller="User" asp-action="Logout">Izloguj se</a>
+                            }
+                            else
+                            {
+                            <a class="btn btn-outline-light me-2 log-in-btn" asp-controller="User" asp-action="Login">
+                            Uloguj se
+                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-trash" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.29 10.71l-4.79 4.79-1.42-1.42 3.79-3.79-3.79-3.79 1.42-1.42 4.79 4.79zM12 4c4.42 0 8 3.58 8 8s-3.58 8-8 8-8-3.58-8-8 3.58-8 8-8z" />
+                            </svg>
+                            </a>
+                            <a class="btn btn-outline-light mt-3 mt-md-0" asp-controller="User" asp-action="Registration">
+                            Registruj se
+                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-trash" viewBox="0 0 24 24">
+                            <path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm4 11h-3v3h-2v-3h-3v-2h3v-3h2v3h3v2z" />
+                            </svg>
+                            </a>
+
+                            } *@
                         </li>
                     </ul>
                 </div>

@@ -3,6 +3,7 @@ using AspNetCoreHero.ToastNotification;
 using Blogging.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Blogging.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseMiddleware<Middleware>();
 
 app.MapControllerRoute(
     name: "default",

@@ -13,11 +13,13 @@ namespace Blogging.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly INotyfService _notyf;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public UserController(IUserRepository userRepository, INotyfService notyf)
+        public UserController(IUserRepository userRepository, INotyfService notyf, IHttpContextAccessor contextAccessor)
         {
             _userRepository = userRepository;
             _notyf = notyf;
+            _contextAccessor = contextAccessor;
         }
         public IActionResult Registration()
         {
@@ -110,7 +112,23 @@ namespace Blogging.Controllers
 
         public IActionResult UserProfile()
         {
-            return View();
+            User user = new User();
+
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                var userCookie = HttpContext!.Request.Cookies["User"];
+                user = JsonConvert.DeserializeObject<User>(userCookie)!;
+            }
+
+            
+
+            var vm = new UpdateUserViewModel()
+            {
+                UserId = user.UserId,
+                Username = user.Username
+            };
+
+            return View(vm);
         }
 
         public IActionResult EditPassword(UpdateUserViewModel model)
