@@ -13,6 +13,7 @@ namespace Blogging.Models
         public int TopicId { get; set; }
         public Topic Topic { get; set; }
         public int? UserId { get; set; }
+        public User User { get; set; }
 
         [NotMapped]
         public IEnumerable<Comment> Comments { get; set; }

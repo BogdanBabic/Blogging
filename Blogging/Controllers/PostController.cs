@@ -23,31 +23,26 @@ namespace Blogging.Controllers
             _userRepository = userRepository;
             _notyf = notyf;
         }
-        public ViewResult PostList(int topicId)
+        public ViewResult PostList(int? topicId)
         {
+            string topic = "Sve Objave";
             IEnumerable<Post> posts;
-            string? topic = "Sve Objave";
 
             var topicObj = _topicRepository.GetTopicById(topicId);
-
-            if (topicObj != null)
-            {
-                topic = topicObj.Name;
-                posts = _postRepository.Posts.Where(p => p.Topic.TopicId == topicId).OrderBy(p => p.ID).ToList();
-            }
+            topic = topicObj.Name;
 
             if (topic == "Sve Objave")
             {
                 posts = _postRepository.Posts.OrderBy(p => p.ID).ToList();
             }
-
             else
             {
-                posts = _postRepository.Posts.ToList();
+                posts = _postRepository.Posts.Where(p => p.Topic.TopicId == topicId).OrderBy(p => p.ID).ToList();
             }
 
             return View(new PostListViewModel(posts, topic));
         }
+
 
         public IActionResult ViewPost(int postId)
         {
@@ -85,7 +80,7 @@ namespace Blogging.Controllers
         public IActionResult CreatePost(CreatePostViewModel model)
         {
             var userCookie = Request.Cookies["User"];
-            var user = JsonConvert.DeserializeObject<User>(userCookie!);
+            User user = null;
 
             var post = new Post
             {
@@ -94,14 +89,23 @@ namespace Blogging.Controllers
                 Thumbnail = model.Thumbnail,
                 TimeCreated = DateTime.Now,
                 TimeUpdated = DateTime.Now,
-                //Topic = model.Topic,
-                TopicId = model.TopicId
+                TopicId = model.TopicId,
+                Topic = _topicRepository.GetTopicById(model.TopicId)
+
             };
 
-            if (user != null)
+            if (userCookie != null)
             {
+                user = JsonConvert.DeserializeObject<User>(userCookie);
                 post.UserId = user.UserId;
             }
+            else
+            {
+                post.UserId = null;
+            }
+
+            var topic = _topicRepository.GetTopicById(model.TopicId);
+            post.Topic = topic;
 
             _postRepository.CreatePost(post);
 

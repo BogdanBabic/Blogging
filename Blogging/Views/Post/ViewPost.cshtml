@@ -5,6 +5,18 @@
         <div class="card-header">
             <h2>@Model.Head</h2>
         </div>
+        <p class="text-muted">
+            @{
+                if (!string.IsNullOrEmpty(Model.User?.Username))
+                {
+                    @Model.User.Username
+                }
+                else
+                {
+                    @:Anonymous
+                }
+            }
+        </p>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-4">

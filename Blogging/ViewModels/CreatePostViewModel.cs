@@ -29,6 +29,7 @@ namespace Blogging.ViewModels
         [Display(Name = "Tema / Kategorija")]
         public Topic Topic { get; set; }
         public int? UserId { get; set; }
+        public User? User { get; set; }
         public IEnumerable<Topic> Topics { get; set; }
     }
 }

@@ -34,6 +34,12 @@ namespace Blogging.Models
             return user != null ? user.Username : null;
         }
 
+        public int? GetUserIdByUsername(string username)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Username == username);
+            return user != null ? (int?)user.UserId : null;
+        }
+
         public void UpdatePassword(User user, string newPassword)
         {
             user.Password = EncryptionHelper.Encrypt(newPassword);

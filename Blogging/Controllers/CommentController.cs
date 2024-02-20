@@ -14,12 +14,14 @@ namespace Blogging.Controllers
         private readonly ITopicRepository _topicRepository;
         private readonly IPostRepository _postRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly IUserRepository _userRepository;
         private readonly INotyfService _notyf;
-        public CommentController(ITopicRepository topicRepository, IPostRepository postRepository, ICommentRepository commentRepository, INotyfService notyf)
+        public CommentController(ITopicRepository topicRepository, IPostRepository postRepository, ICommentRepository commentRepository, INotyfService notyf, IUserRepository userRepository)
         {
             _topicRepository = topicRepository;
             _postRepository = postRepository;
             _commentRepository = commentRepository;
+            _userRepository = userRepository;
             _notyf = notyf;
         }
 
@@ -65,21 +67,22 @@ namespace Blogging.Controllers
         [HttpPost]
         public IActionResult RemoveComment(int commentId)
         {
-            int userId = Convert.ToInt32(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
-
+            var loggedInUserName = HttpContext.User.Identity.Name;
+            var loggedInUserId = _userRepository.GetUserIdByUsername(loggedInUserName);
             var comment = _commentRepository.GetCommentById(commentId);
+            var postId = comment.PostId;
 
-            if (comment.UserId != userId)
+            if (comment.UserId != loggedInUserId)
             {
-                return Forbid();
+                _notyf.Error("Ne možete obrisati tuđ komentar");
+                return RedirectToAction("ViewPost", "Post", new { postId = postId });
             }
 
             _commentRepository.DeleteComment(comment);
 
             _notyf.Success("Komentar uspešno izbrisan");
 
-
-            return RedirectToAction("ViewPost", "Post");
+            return RedirectToAction("ViewPost", "Post", new { postId = postId });
         }
     }
 }
