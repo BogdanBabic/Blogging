@@ -25,25 +25,25 @@ namespace Blogging.Controllers
         }
         public ViewResult PostList(int? topicId)
         {
-            string topic = "Sve Objave";
             IEnumerable<Post> posts;
+            string topicName = "Sve Objave";
 
-            var topicObj = _topicRepository.GetTopicById(topicId);
-            topic = topicObj.Name;
-
-            if (topic == "Sve Objave")
+            if (topicId.HasValue)
             {
-                posts = _postRepository.Posts.OrderBy(p => p.ID).ToList();
+                var topicObj = _topicRepository.GetTopicById(topicId.Value);
+                topicName = topicObj.Name;
+                posts = _postRepository.GetPostsByTopicId(topicId);
             }
             else
             {
-                posts = _postRepository.Posts.Where(p => p.Topic.TopicId == topicId).OrderBy(p => p.ID).ToList();
+                posts = _postRepository.GetAllPosts();
             }
 
-            return View(new PostListViewModel(posts, topic));
+            return View(new PostListViewModel(posts, topicName));
         }
 
 
+        [HttpPost]
         public IActionResult ViewPost(int postId)
         {
             Post p = _postRepository.GetPostById(postId);
@@ -71,16 +71,21 @@ namespace Blogging.Controllers
 
         public IActionResult PostCreator()
         {
-            var vm = new CreatePostViewModel();
-            ViewBag.Topics = _topicRepository.GetAllTopics();
-
-            return View(vm);
+            ViewBag.Topics = _topicRepository.GetAllTopics() ?? new List<Topic>();
+            return View(new CreatePostViewModel());
         }
 
+        [HttpPost]
         public IActionResult CreatePost(CreatePostViewModel model)
         {
+           
             var userCookie = Request.Cookies["User"];
             User user = null;
+
+            if (userCookie != null)
+            {
+                user = JsonConvert.DeserializeObject<User>(userCookie);
+            }
 
             var post = new Post
             {
@@ -90,28 +95,21 @@ namespace Blogging.Controllers
                 TimeCreated = DateTime.Now,
                 TimeUpdated = DateTime.Now,
                 TopicId = model.TopicId,
-                Topic = _topicRepository.GetTopicById(model.TopicId)
-
+                UserId = user?.UserId
             };
 
-            if (userCookie != null)
-            {
-                user = JsonConvert.DeserializeObject<User>(userCookie);
-                post.UserId = user.UserId;
-            }
-            else
-            {
-                post.UserId = null;
-            }
-
-            var topic = _topicRepository.GetTopicById(model.TopicId);
-            post.Topic = topic;
-
             _postRepository.CreatePost(post);
-
             _notyf.Success("Objava uspešno postavljena");
 
-            return RedirectToAction("PostList", "Post");
+            //if (!ModelState.IsValid)
+            //{
+            //    ViewBag.Topics = _topicRepository.GetAllTopics() ?? new List<Topic>(); // Repopulate topics on validation fail
+            //    return View("PostCreator", model);
+            //}
+
+
+            return RedirectToAction("PostList");
         }
+
     }
 }

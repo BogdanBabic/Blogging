@@ -1,23 +1,30 @@
 ﻿@using Blogging.ViewModels
-
 @model CreatePostViewModel
 
-<h3></h3>
+<h3>Create a New Post</h3>
 
 <form asp-controller="Post" asp-action="CreatePost" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
     <div class="form-group mt-5">
-        <label asp-for="Head">Naslov</label>
+        <label asp-for="Head"></label>
         <input asp-for="Head" class="form-control" placeholder="Naslov vaše objave..." />
+        <span asp-validation-for="Head" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="Body">Sadržaj</label>
+        <label asp-for="Body"></label>
         <textarea asp-for="Body" class="form-control" rows="8" placeholder="Tekst vaše objave..."></textarea>
+        <span asp-validation-for="Body" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="TopicId">Tema</label>
+        <label asp-for="TopicId"></label>
         <select asp-for="TopicId" class="form-control" asp-items="@(new SelectList(ViewBag.Topics, "TopicId", "Name"))">
             <option value="">Select a topic</option>
         </select>
+        <span asp-validation-for="TopicId" class="text-danger"></span>
     </div>
+
     <button type="submit" class="btn btn-warning mt-3">Objavi</button>
 </form>

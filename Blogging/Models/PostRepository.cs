@@ -14,18 +14,21 @@ namespace Blogging.Models
             return _context.Posts.Include(p => p.Topic).FirstOrDefault(p => p.ID == id)!;
         }
 
-        public IEnumerable<Post> Posts
+
+        public IEnumerable<Post> GetAllPosts()
         {
-            get
-            {
-                return _context.Posts.Include(p => p.Topic);
-            }
+            return _context.Posts.Include(p => p.Topic).ToList();
         }
 
         public void CreatePost(Post post)
         {
             _context.Posts.Add(post);
             _context.SaveChanges();
+        }
+
+        public List<Post> GetPostsByTopicId(int? topicId)
+        {
+            return _context.Posts.Include(p => p.Topic).Where(p => p.TopicId == topicId).OrderBy(p => p.ID).ToList();
         }
     }
 }

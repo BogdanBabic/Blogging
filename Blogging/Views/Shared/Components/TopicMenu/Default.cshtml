@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Topic>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle"
+       data-toggle="dropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       id="nav-dropdown"
+       aria-expanded="false">
+        Popularne Teme
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-dropdown">
+        @foreach (var topic in Model)
+        {
+            <li>
+                <a asp-controller="Post" asp-action="PostList"
+                   asp-route-topicId="@topic.TopicId"
+                   class="dropdown-item">
+                    @topic.Name
+                </a>
+            </li>
+        }
+    </ul>
+</li>
