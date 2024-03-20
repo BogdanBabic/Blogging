@@ -6,9 +6,12 @@
     @Model.SelectedTopic
 </h1>
 
-<div class="col-md-3">
-    @foreach (var post in Model.Posts)
-    {
-        <partial name="_PostCard" model="post"/>
-    }
+<div class="container">
+    <div class="d-flex flex-column">
+        @foreach (var post in Model.Posts)
+        {<div class="col">
+            <partial name="_PostCard" model="post"/>
+        </div>
+        }
+    </div>
 </div>

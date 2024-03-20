@@ -1,13 +1,17 @@
 ﻿@model Comment
-
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <div class="card mt-3">
-    <div class="card-body">
+    <div class="card-body" style="background-color: #ECECEC">
         <p class="text-muted">
             @{
                 if (!string.IsNullOrEmpty(Model.User?.Username))
                 {
-                    @Model.User.Username
+                    <svg width="21" height="21" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" version="1.1" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                        <circle cx="8" cy="6" r="3.25" />
+                        <path d="m2.75 14.25c0-2.5 2-5 5.25-5s5.25 2.5 5.25 5" />
+                    </svg> @Model.User.Username
                 }
                 else
                 {
@@ -16,12 +20,20 @@
             }
         </p>
         <p>@Model.Body</p>
-        <p class="text-muted">Posted on: @Model.TimeCreated.ToString("dd/MM/yyyy")</p>
-        <form asp-controller="Comment" asp-action="RemoveComment" method="post">
-            <input type="hidden" name="commentId" value="@Model.ID" />
-            <button type="submit" class="btn btn-outline-danger">
-                Obriši komentar
-            </button>
-        </form>
+        <p class="text-muted">Objavljeno: @Model.TimeCreated.ToString("dd/MM/yyyy")</p>
+        @{
+            var isLoggedIn = HttpContextAccessor!.HttpContext!.User.Identity.IsAuthenticated;
+            var username = HttpContextAccessor.HttpContext.User.Identity.Name;
+
+            if (isLoggedIn && username == Model.User?.Username)
+            {
+                <form asp-controller="Comment" asp-action="RemoveComment" method="post">
+                    <input type="hidden" name="commentId" value="@Model.ID" />
+                    <button type="submit" class="btn btn-outline-danger">
+                        Obriši komentar
+                    </button>
+                </form>
+            }
+        }
     </div>
 </div>

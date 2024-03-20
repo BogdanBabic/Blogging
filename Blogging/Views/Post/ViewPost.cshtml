@@ -9,7 +9,10 @@
             @{
                 if (!string.IsNullOrEmpty(Model.User?.Username))
                 {
-                    @Model.User.Username
+                    <svg width="21" height="21" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" version="1.1" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                        <circle cx="8" cy="6" r="3.25" />
+                        <path d="m2.75 14.25c0-2.5 2-5 5.25-5s5.25 2.5 5.25 5" />
+                    </svg> @Model.User.Username
                 }
                 else
                 {
@@ -17,16 +20,20 @@
                 }
             }
         </p>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <img src="@Model.Thumbnail" class="img-fluid" alt="Thumbnail">
+        <span class="border border-white rounded ms-3 me-3" style="background-color: #ECECEC">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p>@Model.Body</p>
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <p>@Model.Body</p>
+                <div class="row">
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <img src="@Model.Thumbnail" class="img-fluid" alt="Thumbnail">
+                    </div>
                 </div>
             </div>
-        </div>
+        </span>
         <div class="card-footer">
             <p class="text-muted">Objavljeno: @Model.TimeCreated.ToString("dd/MM/yyyy")</p>
             <p class="text-muted">Izmenjeno: @Model.TimeUpdated.ToString("dd/MM/yyyy")</p>

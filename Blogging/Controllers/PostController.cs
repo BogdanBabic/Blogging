@@ -43,7 +43,6 @@ namespace Blogging.Controllers
         }
 
 
-        [HttpPost]
         public IActionResult ViewPost(int postId)
         {
             Post p = _postRepository.GetPostById(postId);
