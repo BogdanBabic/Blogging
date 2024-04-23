@@ -11,7 +11,7 @@ namespace Blogging.Models
 
         public Post GetPostById(int id)
         {
-            return _context.Posts.Include(p => p.Topic).FirstOrDefault(p => p.ID == id)!;
+            return _context.Posts.Include(p => p.Topic).Include(p => p.User).FirstOrDefault(p => p.ID == id)!;
         }
 
 
@@ -20,15 +20,27 @@ namespace Blogging.Models
             return _context.Posts.Include(p => p.Topic).ToList();
         }
 
+        public List<Post> GetPostsByTopicId(int? topicId)
+        {
+            return _context.Posts.Include(p => p.Topic).Where(p => p.TopicId == topicId).OrderBy(p => p.ID).ToList();
+        }
+
         public void CreatePost(Post post)
         {
             _context.Posts.Add(post);
             _context.SaveChanges();
         }
 
-        public List<Post> GetPostsByTopicId(int? topicId)
+        public void DeletePost(Post post)
         {
-            return _context.Posts.Include(p => p.Topic).Where(p => p.TopicId == topicId).OrderBy(p => p.ID).ToList();
+            _context.Posts.Remove(post);
+            _context.SaveChanges();
+        }
+
+        public void UpdatePost(Post post)
+        {
+            _context.Posts.Update(post);
+            _context.SaveChanges(true);
         }
     }
 }

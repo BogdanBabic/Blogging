@@ -67,16 +67,16 @@ namespace Blogging.Controllers
         [HttpPost]
         public IActionResult RemoveComment(int commentId)
         {
-            var loggedInUserName = HttpContext.User.Identity.Name;
-            var loggedInUserId = _userRepository.GetUserIdByUsername(loggedInUserName);
+            //var loggedInUserName = HttpContext.User.Identity.Name;
+            //var loggedInUserId = _userRepository.GetUserIdByUsername(loggedInUserName);
             var comment = _commentRepository.GetCommentById(commentId);
             var postId = comment.PostId;
 
-            if (comment.UserId != loggedInUserId)
-            {
-                _notyf.Error("Ne možete obrisati tuđ komentar");
-                return RedirectToAction("ViewPost", "Post", new { postId = postId });
-            }
+            //if (comment.UserId != loggedInUserId)
+            //{
+            //    _notyf.Error("Ne možete obrisati tuđ komentar");
+            //    return RedirectToAction("ViewPost", "Post", new { postId = postId });
+            //}
 
             _commentRepository.DeleteComment(comment);
 

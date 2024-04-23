@@ -7,11 +7,14 @@
 </h1>
 
 <div class="container">
-    <div class="d-flex flex-column">
-        @foreach (var post in Model.Posts)
-        {<div class="col">
-            <partial name="_PostCard" model="post"/>
+    <ul class="list-group">
+        <div class="d-flex flex-column">
+            @foreach (var post in Model.Posts)
+            {
+                <div class="col">
+                    <partial name="_PostCard" model="post" />
+                </div>
+            }
         </div>
-        }
-    </div>
+    </ul>
 </div>

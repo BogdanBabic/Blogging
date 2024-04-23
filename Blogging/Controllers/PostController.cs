@@ -32,11 +32,11 @@ namespace Blogging.Controllers
             {
                 var topicObj = _topicRepository.GetTopicById(topicId.Value);
                 topicName = topicObj.Name;
-                posts = _postRepository.GetPostsByTopicId(topicId);
+                posts = _postRepository.GetPostsByTopicId(topicId).OrderByDescending(p => p.TimeCreated);
             }
             else
             {
-                posts = _postRepository.GetAllPosts();
+                posts = _postRepository.GetAllPosts().OrderByDescending(p => p.TimeCreated);
             }
 
             return View(new PostListViewModel(posts, topicName));
@@ -94,20 +94,68 @@ namespace Blogging.Controllers
                 TimeCreated = DateTime.Now,
                 TimeUpdated = DateTime.Now,
                 TopicId = model.TopicId,
-                UserId = user?.UserId
             };
 
+            if (user != null)
+            {
+                post.UserId = user.UserId;
+            }
+            else
+            {
+                post.UserId = null;
+            }
             _postRepository.CreatePost(post);
             _notyf.Success("Objava uspešno postavljena");
 
-            //if (!ModelState.IsValid)
-            //{
-            //    ViewBag.Topics = _topicRepository.GetAllTopics() ?? new List<Topic>(); // Repopulate topics on validation fail
-            //    return View("PostCreator", model);
-            //}
+            return RedirectToAction("PostList");
+        }
 
+        public IActionResult RemovePost(int postId)
+        {
+            var loggedInUserName = HttpContext.User.Identity.Name;
+            var logegdInUserId = _userRepository.GetUserIdByUsername(loggedInUserName);
+            var post = _postRepository.GetPostById(postId);
+
+
+            if (postId != null)
+            {
+                _postRepository.DeletePost(post);
+            }
+
+            _notyf.Success("Objava uspešno obrisana");
 
             return RedirectToAction("PostList");
+
+        }
+
+        public IActionResult PostEditor(int postId)
+        {
+            var post = _postRepository.GetPostById(postId);
+            ViewBag.Topics = _topicRepository.GetAllTopics() ?? new List<Topic>();
+
+            UpdatePostViewmodel vm = new UpdatePostViewmodel()
+            {
+                ID = post.ID,
+                Head = post.Head,
+                Body = post.Body
+            };
+
+            return View(vm);
+        }
+
+        public IActionResult EditPost(UpdatePostViewmodel model)
+        {
+            var post = _postRepository.GetPostById(model.ID);
+
+            post.Head = model.Head;
+            post.Body = model.Body;
+            post.ID = model.ID;
+            post.TopicId = model.TopicId;
+
+            _notyf.Success("Objava izmenjena");
+            _postRepository.UpdatePost(post);
+
+            return View("ViewPost", post);
         }
 
     }
