@@ -151,6 +151,7 @@ namespace Blogging.Controllers
             post.Body = model.Body;
             post.ID = model.ID;
             post.TopicId = model.TopicId;
+            post.TimeUpdated = DateTime.Now;
 
             _notyf.Success("Objava izmenjena");
             _postRepository.UpdatePost(post);
